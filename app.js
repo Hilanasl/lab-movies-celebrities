@@ -14,6 +14,10 @@ const express = require('express');
 const hbs = require('hbs');
 
 const app = express();
+const path = require('path');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
+hbs.registerPartials(__dirname + "/views/partials");
 
 // ℹ️ This function is getting exported from the config folder. It runs most middlewares
 require('./config')(app);
@@ -28,6 +32,13 @@ app.locals.title = `${capitalized(projectName)}- Generated with Ironlauncher`;
 const index = require('./routes/index');
 app.use('/', index);
 
+const celebritiesRouter = require('./routes/celebrities.routes');
+app.use('/', celebritiesRouter);
+
+const moviesRouter = require('./routes/movies.routes');
+app.use('/', moviesRouter);
+
+// app.use(express.json({ extended: false }));
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require('./error-handling')(app);
 
